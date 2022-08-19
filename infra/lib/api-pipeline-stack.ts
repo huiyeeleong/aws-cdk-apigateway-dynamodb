@@ -29,8 +29,9 @@ export class ApiPipelineStack extends Stack {
             'cd infra',
             'npm ci',
             'npm run build',
-            'npx cdk synth',
-            'mv cdk.out ../'
+            //'npx cdk synth',
+            'cdk deploy',
+            //'mv cdk.out ../'
         ];
 
         //create codepipeline
