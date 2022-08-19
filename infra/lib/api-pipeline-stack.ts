@@ -45,10 +45,11 @@ export class ApiPipelineStack extends Stack {
                     connectionArn: 'arn:aws:codestar-connections:ap-southeast-2:951639499020:connection/281450c5-d4ba-4650-9145-4f4b9cf7c6dc',
                     
                 }),
-                commands: buildCommands
-                
+                commands: buildCommands,
+                primaryOutputDirectory: 'infra/cdk.out',
             }),
             selfMutation: true,
+            
         });
         pipeline.addStage(new MyPipelineAppStage(this, "Deploy"));
         
