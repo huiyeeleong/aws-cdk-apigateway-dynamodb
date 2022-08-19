@@ -13,6 +13,7 @@ export class ApiStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
 
+    //create dynamodb
     const dynamoTable = new ddb.Table(this, 'BookTable', {
       tableName: 'BookStorage',
       readCapacity: 1,
@@ -23,6 +24,7 @@ export class ApiStack extends Stack {
       },
     })
 
+    //lambda function created handler
     const createBookFunction = new lambda.Function(this, 'CreateHandler', {
       runtime: lambda.Runtime.NODEJS_14_X,
       code: lambda.Code.fromAsset('../code'),
@@ -33,6 +35,7 @@ export class ApiStack extends Stack {
       logRetention: RetentionDays.ONE_WEEK
     });
 
+    //lambda function get handler
     const getBookFunction = new lambda.Function(this, 'GetHandler', {
       runtime: lambda.Runtime.NODEJS_14_X,
       code: lambda.Code.fromAsset('../code'),
@@ -43,6 +46,7 @@ export class ApiStack extends Stack {
       logRetention: RetentionDays.ONE_WEEK
     });
 
+    //lambda function list handler
     const listBooksFunction = new lambda.Function(this, 'ListHandler', {
       runtime: lambda.Runtime.NODEJS_14_X,
       code: lambda.Code.fromAsset('../code'),
@@ -53,6 +57,7 @@ export class ApiStack extends Stack {
       logRetention: RetentionDays.ONE_WEEK
     });
 
+    //lambda function delete handler
     const deleteBookFunction = new lambda.Function(this, 'DeleteHandler', {
       runtime: lambda.Runtime.NODEJS_14_X,
       code: lambda.Code.fromAsset('../code'),
@@ -63,6 +68,7 @@ export class ApiStack extends Stack {
       logRetention: RetentionDays.ONE_WEEK
     });
 
+    //lambda function update handler
     const updateBookFunction = new lambda.Function(this, 'UpdateHandler', {
       runtime: lambda.Runtime.NODEJS_14_X,
       code: lambda.Code.fromAsset('../code'),
@@ -73,25 +79,28 @@ export class ApiStack extends Stack {
       logRetention: RetentionDays.ONE_WEEK
     });
 
+    //grant permission lambda function to access dynamo db
     dynamoTable.grant(createBookFunction, 'dynamodb:CreateItem', 'dynamodb:PutItem')
     dynamoTable.grant(getBookFunction, 'dynamodb:GetItem');
     dynamoTable.grant(listBooksFunction, 'dynamodb:Scan')
     dynamoTable.grant(deleteBookFunction, 'dynamodb:DeleteItem')
     dynamoTable.grant(updateBookFunction, 'dynamodb:UpdateItem')
 
+    //create api gateway
     const api = new apigw.RestApi(this, `BookAPI`, {
       restApiName: `book-rest-api`,
     });
 
     const mainPath = api.root.addResource('books');
 
+    //integrate lambda to api gateway
     const createBookIntegration = new apigw.LambdaIntegration(createBookFunction);
     const getBookIntegration = new apigw.LambdaIntegration(getBookFunction);
     const listBooksIntegration = new apigw.LambdaIntegration(listBooksFunction);
     const deleteBookIntegration = new apigw.LambdaIntegration(deleteBookFunction);
     const updateBookIntegration = new apigw.LambdaIntegration(updateBookFunction);
 
-
+    //add method to api gatewate
     mainPath.addMethod('GET', listBooksIntegration);
     mainPath.addMethod('POST', createBookIntegration);
 

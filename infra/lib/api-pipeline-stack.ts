@@ -11,6 +11,7 @@ export class ApiPipelineStack extends Stack {
         super(scope, id, props);
         
 
+        //connect code star arn with github
         const connectionArn = ssm.StringParameter.valueForStringParameter(this, '/serverless-api/git/connection-arn', 1);
         const buildCommands = [
             'npm ci',
@@ -22,6 +23,7 @@ export class ApiPipelineStack extends Stack {
             'mv cdk.out ../'
         ];
 
+        //create codepipeline
         const pipeline = new CodePipeline(this, 'Pipeline', {
             pipelineName: 'ServerlessAPI-Pipeline',
             synth: new ShellStep('Build', {
