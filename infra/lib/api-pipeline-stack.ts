@@ -4,11 +4,20 @@ import {
     StackProps,
 } from 'aws-cdk-lib';import { Construct } from "constructs";
 import { CodePipeline, CodePipelineSource, ShellStep } from "aws-cdk-lib/pipelines";
+import * as iam from "aws-cdk-lib/aws-iam"
 import { MyPipelineAppStage } from "./api-stack-stage";
+import { ManagedPolicy } from 'aws-cdk-lib/aws-iam';
 
 export class ApiPipelineStack extends Stack {
     constructor(scope: Construct, id: string, props?: StackProps) {
         super(scope, id, props);
+
+        //create role for codepipeline
+        const actionRole = new iam.Role(this, 'ActionRole', {
+            assumedBy: new iam.ServicePrincipal('codepipeline.amazonaws.com'),
+            description: 'CodePipeline Role',
+            managedPolicies: [iam.ManagedPolicy.fromAwsManagedPolicyName('AdministratorAccess')]
+          });
         
 
         //connect code star arn with github
