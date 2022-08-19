@@ -12,7 +12,7 @@ export class ApiPipelineStack extends Stack {
         
 
         //connect code star arn with github
-        const connectionArn = ssm.StringParameter.valueForStringParameter(this, '/serverless-api/git/connection-arn', 1);
+        //const connectionArn = ssm.StringParameter.valueForStringParameter(this, '/serverless-api/git/connection-arn', 1);
         const buildCommands = [
             'npm ci',
             'npm run build',
@@ -28,7 +28,7 @@ export class ApiPipelineStack extends Stack {
             pipelineName: 'ServerlessAPI-Pipeline',
             synth: new ShellStep('Build', {
                 input: CodePipelineSource.connection('huiyeeleong/aws-cdk-apigateway-dynamodb', 'main', {
-                    connectionArn: connectionArn,
+                    connectionArn: 'arn:aws:codestar-connections:ap-southeast-2:951639499020:connection/281450c5-d4ba-4650-9145-4f4b9cf7c6dc',
                 }),
                 commands: buildCommands
             }),
