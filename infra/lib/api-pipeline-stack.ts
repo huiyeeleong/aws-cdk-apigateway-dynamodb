@@ -22,20 +22,20 @@ export class ApiPipelineStack extends Stack {
 
         //connect code star arn with github
         //const connectionArn = ssm.StringParameter.valueForStringParameter(this, '/serverless-api/git/connection-arn', 1);
-        const buildCommands = [
-            // 'npm ci',
-            // 'npm run build',
-            // 'cd infra',
-            // 'npm ci',
-            // 'npm run build',
-            // 'npx cdk synth',
-            // 'mv cdk.out ../'
-            'cd infra',
-            'npm ci',
-            'npm run build',
-            'npx cdk synth',
+        // const buildCommands = [
+        //     // 'npm ci',
+        //     // 'npm run build',
+        //     // 'cd infra',
+        //     // 'npm ci',
+        //     // 'npm run build',
+        //     // 'npx cdk synth',
+        //     // 'mv cdk.out ../'
+        //     'cd infra',
+        //     'npm ci',
+        //     'npm run build',
+        //     'npx cdk synth',
             
-        ];
+        // ];
 
         //create codepipeline
         const pipeline = new CodePipeline(this, 'Pipeline', {
@@ -46,8 +46,8 @@ export class ApiPipelineStack extends Stack {
                     connectionArn: 'arn:aws:codestar-connections:ap-southeast-2:951639499020:connection/281450c5-d4ba-4650-9145-4f4b9cf7c6dc',
                     
                 }),
-                commands: buildCommands,
-                primaryOutputDirectory: 'infra/cdk.out',
+                installCommands: ["npm install -g aws-cdk"],
+				commands: ["cd infra", "npm ci", "npm run build", "npx cdk synth"]
             }),
             selfMutation: true,
             
