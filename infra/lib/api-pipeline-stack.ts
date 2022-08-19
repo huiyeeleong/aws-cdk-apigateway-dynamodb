@@ -24,6 +24,7 @@ export class ApiPipelineStack extends Stack {
         //const connectionArn = ssm.StringParameter.valueForStringParameter(this, '/serverless-api/git/connection-arn', 1);
         const buildCommands = [
             'pwd',
+            'npm install -g aws-cdk',
             //'npm ci',
             //'npm run build',
             'cd infra',
