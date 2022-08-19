@@ -23,8 +23,9 @@ export class ApiPipelineStack extends Stack {
         //connect code star arn with github
         //const connectionArn = ssm.StringParameter.valueForStringParameter(this, '/serverless-api/git/connection-arn', 1);
         const buildCommands = [
-            'npm ci',
-            'npm run build',
+            'pwd',
+            //'npm ci',
+            //'npm run build',
             'cd infra',
             'npm ci',
             'npm run build',
