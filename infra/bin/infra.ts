@@ -6,5 +6,6 @@ import {ApiPipelineStack} from "../lib/api-pipeline-stack";
 
 const app = new cdk.App();
 new ApiPipelineStack(app, 'PipelineStack', {});
+
 //new ApiStack(app, 'ApiStack', {});
 app.synth();

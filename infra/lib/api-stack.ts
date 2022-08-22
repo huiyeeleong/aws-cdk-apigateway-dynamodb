@@ -14,6 +14,7 @@ export class ApiStack extends Stack {
     super(scope, id, props);
 
     //create dynamodb
+    
     const dynamoTable = new ddb.Table(this, 'BookTable', {
       tableName: 'BookStorage',
       readCapacity: 1,
@@ -26,7 +27,7 @@ export class ApiStack extends Stack {
 
     //lambda function created handler
     const createBookFunction = new lambda.Function(this, 'CreateHandler', {
-      runtime: lambda.Runtime.NODEJS_14_X,
+      runtime: lambda.Runtime.NODEJS_12_X,
       code: lambda.Code.fromAsset('../code'),
       handler: 'create.handler',
       environment: {
